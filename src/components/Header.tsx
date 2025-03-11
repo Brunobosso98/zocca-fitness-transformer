@@ -26,10 +26,24 @@ const Header = () => {
     };
   }, []);
 
+  // Prevent scrolling when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   const menuItems = [
     { name: 'Início', href: '#hero' },
     { name: 'Serviços', href: '#services' },
     { name: 'Sobre', href: '#about' },
+    { name: 'Por que Zocca?', href: '#why-choose' },
     { name: 'Resultados', href: '#results' },
     { name: 'Contato', href: '#contact' },
   ];
@@ -71,20 +85,20 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className="lg:hidden text-zocca-blue hover:text-zocca-orange transition-colors"
+            className="lg:hidden text-zocca-blue hover:text-zocca-orange transition-colors z-50"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Fixed positioning to ensure it stays visible */}
         <div 
           className={`fixed inset-0 bg-white z-40 pt-20 px-4 transform transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          } lg:hidden`}
+          } lg:hidden overflow-y-auto`}
         >
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-6 mt-16">
             {menuItems.map((item, index) => (
               <a
                 key={index}
